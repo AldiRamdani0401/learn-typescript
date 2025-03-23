@@ -1,0 +1,1145 @@
+=== TypeScript Course ===
+
+****** BASIC TYPESCRIPT ******
+------------------------------------------------------------------------------------------
+ ### 1. Tipe Data TypeScript ###
+------------------------------------------------------------------------------------------
+	Tipe data pada TypeScript sama dengan tipe data yang berlaku di JavaScript
+	Tipe Data Primitif :
+	- number 	=> Number di JavaScript
+	- boolean	=> Boolean di JavaScript
+	- string	=> String di JavaScript
+	
+	
+------------------------------------------------------------------------------------------
+ ### 2. Deklarasi Variabel ###
+------------------------------------------------------------------------------------------
+- Karena TypeScript adalah Strongly Type Language, 
+  oleh karena itu saat membuat variabel, diharuskan menentukan tipe data variabelnya.
+- Jika variabel sudah ditentukan tipe datanya, 
+  variabel tersebut tidak dapat menerima nilai tipe data lain.
+- TypeScript secara otomatis mendeteksi tipe data yang sedang digunakan, 
+  tapi bisa juga menentukan secara eksplisit:
+  
+  SYNTAX: const namaVariable:tipedata = value;
+  
+   +++ STUDY CASE 1 +++
+    let name = "Aldi Ramdani"
+        name = 100;
+   * NOTE:
+   - tipe data variabel name akan dideteksi secara otomatis memiliki tipe data String
+     karena nilai yang di set adalah String. "Aldi Ramdani"
+   - mencoba memasukan 100 kedalam variabel name. Ini akan menampilkan error
+     karena name hanya menerima String. sedangkan 100 adalah Number  
+   +++ STUDY CASE 2 +++
+    // Cara Penulisan 1
+    const name: string = "Aldi Ramdani"
+    const balance: number = 1000;
+    const isVip: boolean = true;
+    
+    // Cara Penulisan 2
+    const name: String = "Aldi Ramdani"
+    const balance: Number = 1000;
+    const isVip: Boolean = true;
+    
+    
+------------------------------------------------------------------------------------------
+ ### 3. Babel TypeScript ###
+------------------------------------------------------------------------------------------
+- Pada TypeScript untuk unit test menggunakan Jest dan Babel.
+- Banyak Programmer TypeScript mengeluh ketika proses development,
+  menggunakan TypeScript lebih lambat karena harus melakukan kompilasi terlebih dahulu.
+- Oleh karena itu, @babel/typescript melakukan cara kompilasinya dengan cara menghapus
+  seluruh kode TypeScript dan menjadikan kode JavaScript.
+- Oleh sebab itu, error pada kode TypeScript, kadang tidak terjadi error (saat Unit Test) 
+  karena kode TypeScript dihapus (diubah ke JavaScript) oleh Babel.
+- Solusinya, diharuskan secara reguler melakukan pengecekan menggunakan perintah: npx tsc
+  untuk memastikan tidak ada kode TypeScript yang bermasalah.
+  
+  +++ STUDY CASE : UNIT TEST +++
+		describe("Data Type", () => {
+			it("should must declare", () => {
+					let name: String = "Aldi Ramdani";
+					let balance: Number = 100;
+					let isVip: Boolean = true;
+
+					console.info(name);
+					console.info(balance);
+					console.info(isVip);
+
+					name = 100;
+					balance = "Aldi";
+					isVip = 1;
+				});
+		});
+
+   # PROBLEM :
+   - Jika coba dijalankan perintah kompilasi: npx tsc
+     akan menghasilkan error (TypeScript Error)
+   - Tapi jika dijalankan unit test: yarn test
+     tidak akan terjadi error. 
+     Karena kode TypeScript akan diubah oleh Babel menjadi JavaScript  
+		
+
+   # SOLUTION :
+   - Menjalankan TypeScript Compiler secara terus menerus.
+     Dengan perintah: npx tsc --watch.
+     
+     Output : Setiap ada perubahan kode akan selalu dicek.
+     [1:21:00 am] File change detected. Starting incremental compilation...
+     [1:21:00 am] Found 0 errors. Watching for file changes.
+
+  
+------------------------------------------------------------------------------------------
+ ### 4. Tipe Data Array ###
+------------------------------------------------------------------------------------------
+	Definisi Tipe Data Array
+	Tipe data Array di TypeScript juga sama seperti di JavaScript, cara pembuatannya serta
+	cara penggunaannya.
+	Pada TypeScript tipe data Array bisa menggunakan tanda TipeData[] atau Array<TipeData>
+	 
+	+++ STUDY CASE +++
+		const names: string[] = ["aldi", "hilda", "amelia"];
+		const values: number[] = [1, 2, 3];
+		console.info(names);
+		console.info(values);
+		
+  B. Read Only Array
+	Pada TypeScript dapat membuat Array dengan tipe readonly (tidak bisa diubah lagi)
+	dengan menggunakan tipe data ReadonlyArray<TipeData>
+	
+  +++ STUDY CASE +++
+		const hobbies: ReadonlyArray<string> = ["Ngoding", "Ngopi"];
+		console.info(hobbies);
+		hobbies[0] = "Main";
+
+ * NOTE:
+   - Akan tampil error yang menandakan hobbies adalah Array memiliki kata kunci Readonly
+     contoh error: 
+     Index signature in type 'readonly string[]' only permits reading.ts(2542)
+  
+  
+------------------------------------------------------------------------------------------
+ ### 4. Tipe Data Tuple ###
+------------------------------------------------------------------------------------------
+	Definisi Tipe Data Tuple
+	Tuple merupakan tipe data Array yang panjang Array dan juga tipe data di tiap index bisa
+	ditentukan.
+	Pada kasus penggunaan Tuple bersifat read only (tidak bisa diubah), dengan menambahkan 
+	kata kunci readonly
+
+  +++ STUDY CASE +++
+		const person: readonly [string, string, number] = ["Aldi", "Ramdani", "27"];
+		console.info(person[0]);
+		console.info(person[1]);
+		console.info(person[2]);
+		person[0] = "Hilda";
+  
+   * NOTE:
+   - Akan tampil error yang menandakan person memiliki kata kunci Readonly
+     contoh error: 
+     Cannot assign to '0' because it is a read-only property.ts(2540)
+  
+------------------------------------------------------------------------------------------
+ ### 5. Tipe Data Any ###
+------------------------------------------------------------------------------------------
+	Definisi Tipe Data Any
+	Any merupakan tipe data Bebas. Membuat TypeScript tidak melakukan pengecekan apapun
+	terhadap akses data tersebut.
+	
+	Pada TypeScript, setiap data idealnya memiliki deklarasi jenis data.
+	Pada JavaScript, misalkan menggunakan tipe object, idealnya harus ada ketentuan
+	terhadap attribute yang ditetapkan, namun pada JavaScript hal itu tidak diwajibkan.
+	Pada TypeScript, jika ada kebutuhan untuk membuat tipe data yang bebas seperti
+	JavaScript, bisa menggunakan tipe data Any.
+  
+  +++ STUDY CASE +++
+		const person: any = {
+			id: 1,
+			name: "Aldi Ramdani",
+			age: 27
+		};
+    person.age = 30;
+    person.country = "Indonesia";
+    console.info(person);
+    
+   * NOTE:
+   - Maka akan menjadi seperti tipe data Object JavaScript.
+   - Jika coba compile, tidak akan terjadi error.
+  
+------------------------------------------------------------------------------------------
+ ### 6. Tipe Data Union ###
+------------------------------------------------------------------------------------------
+	Definisi Tipe Data Union
+	Union merupakan tipe data yang mengizinkan perubahan pada tipe data didalamnya,
+	selama tidak keluar dari lingkup tipe data yang telah ditentukan. 
+	
+	Pada JavaScript, dapat menyimpan berbagai jenis tipe data pada variabel yang sama.
+	Pada TypeScript, jika ada kebutuhan untuk membuat variable yang bisa berubah bentuk
+	tipe data, bisa menggunakan Union type.
+	Dengan demikian, secara otomatis TypeScript akan mengizinkan perubahan tipe data,
+	selama tidak keluar dari lingkup tipe data yang telah ditentukan. 
+  
+  +++ STUDY CASE : Success +++
+		let sample: number | string | boolean = "Aldi";
+    sample = 100;
+    sample = true;
+    console.info(sample);
+  	
+   * NOTE:
+   - Tipe data yang diizinkan : number, string, boolean
+   - Tidak akan terjadi error, karena masih dalam lingkup yang ditentukan.
+  
+  +++ STUDY CASE : Error +++
+		let sample: number | string | boolean = "Aldi";
+    sample = [];
+    console.info(sample);
+  	
+   * NOTE:
+   - Tipe data yang diizinkan : number, string, boolean
+   - Akan terjadi error, karena diluar dari lingkup yang ditentukan.
+  
+  Pada penggunaan Union, perlu diperhatikan dalam pemanggilan method 
+  terhadap variabel tersebut. Hal ini karena tipe datanya bisa berubah.
+  Oleh karena itu, ada baiknya dibutuhkan sebuah pengecekan tipe data terlebih dahulu
+  menggunakan typeof. Agar kesalahan dapat dicegah.
+  
+  +++ STUDY CASE +++
+		function process(value: number | string | boolean) {
+			if (typeof value === "string") {
+				return value.toUpperCase();
+			} else if (typeof value === "number") {
+				return value + 2;
+			} else {
+				return !value;
+			}
+		}
+		
+		process("Aldi"); 	// output: ALDI
+		process(27); 			// output: 29
+		process(false); 	// output: true
+  
+  
+------------------------------------------------------------------------------------------
+ ### 7. Tipe Data Alias / Type ###
+------------------------------------------------------------------------------------------
+	A. Definisi Tipe Data Alias / Type
+		 Alias merupakan tipe data yang memungkinkan pendefinisian tipe data dengan nama khusus (Alias).
+		 Tipe data Alias dapat digunakan untuk tipe data primitif seperti String atau tipe data yang 
+		 non-primitif seperti Object dan Array. 
+		
+		 Pada kode TypeScript menggunakan tipe data Any tidak direkomendasikan, Any memungkinkan variabel
+		 dapat menyimpan nilai dari tipe data apa pun, menghilangkan keunggulan TypeScript dalam type safety. 
+		 Tipe data Any digunakan ketika ingin menggunakan kode yang tidak bisa diubah, sering terjadi pada 
+		 penggunaan Library orang lain yang sudah tidak bisa diubah atau ingin melakukan Kustomisasi kode, 
+		 dan ketika attribute belum pasti datanya.
+  
+		 1. Contoh Penggunaan Any pada Library Orang lain:
+				 declare function fetchUserData(userId: string): any;
+
+				 const user = fetchUserData("123"); 
+
+				 console.log(user.name);
+					
+				* Note:
+					Karena fetchUserData dikembalikan sebagai Any, memungkinkan dapat mengakses properti yang mungkin 
+					tidak ada tanpa TypeScript memberikan peringatan. Ini beresiko terjadi error runtime jika
+					properti tersebut tidak ada.
+		  
+			  // Solusi: Library fetchUserData
+					type User = {
+						id: string;
+						name: string;
+						email: string;
+					}
+					const user = fetchUserData("123") as User;
+					console.log(user.name);
+
+		2. Contoh Penggunaan Any pada Attribute yang belum pasti datanya:
+			 Misalkan pada kasus menerima response dari API yang struktur datanya belum diketahui / belum pasti.
+			 Pada response API strukturnya bervariasi, dan menggunakan tipe data Any untuk sementara waktu.
+				
+				type ApiResponse = {
+					data: any;
+				}
+				
+				const response: ApiResponse = {
+					data: fetchSomeData()
+				}
+				
+				console.log(response.data);
+				
+			
+			* Note:
+				Karena fetchUserData dikembalikan sebagai Any, memungkinkan dapat mengakses properti yang mungkin 
+				tidak ada tanpa TypeScript memberikan peringatan. Ini beresiko terjadi error runtime jika properti 
+				tersebut tidak ada.
+
+		Pada suatu kasus ingin membuat tipe data object sendiri, bisa menggunakan tipe data Alias untuk
+		membuat struktur tipe data untuk object tersebut. 
+		
+			+++ STUDY CASE : Penggunaan Alias +++
+				export type Category = {
+					id: string;
+					name: string;
+				};
+				
+				export type Product = {
+					id: string;
+					name: string;
+					price: number;
+					category: Category;
+				};
+				
+				// product.description = "ini adalah hp bagus"; => error;
+				console.info(category);
+				console.info(product);
+				
+			 * NOTE:
+				 - Struktur tipe data Product (Alias) yang diizinkan : id, name, price, category
+				 - Error terjadi karena property "description" itu tidak ada pada tipe data Product.
+				 - Output:
+					 Property 'description' does not exist on type 'Product'.ts(2339)
+				 - Dengan Alias property yang tidak ada akan dicegah, sedang pada Any tidak.
+		
+  B. Tipe data Alias untuk tipe data Union 
+		 Alias juga dapat dikombinasikan dengan tipe data Union. 
+  
+  	 +++ STUDY CASE : Penggunaan Alias pada tipe data Union +++
+			 export type ID = string | number;
+			 
+			 export type Category = {
+			 	id: ID;
+			 	name: string;
+			 }
+			 
+			 export type Product = {
+			 	id: ID;
+			 	name: string;
+			 	price: number;
+			 	category: Category;
+			 }
+  
+			 const category: Category = {		=> id: diizinkan menggunakan Number
+				  id: 1,
+				  name: "Handphone",
+				};
+
+				const product: Product = { 	 => id: diizinkan menggunakan String
+				  id: "1",
+				  name: "Samsung S20",
+				  price: 2000,
+				  category: category,
+				};
+
+				console.info(category);
+				console.info(product);
+  
+  
+------------------------------------------------------------------------------------------
+ ### 8. Object Type ###
+------------------------------------------------------------------------------------------
+		 Pada suatu kasus, membuat Alias terlebih dahulu merupakan proses yang cukup panjang.
+		 Ada cara untuk mengatasi hal tersebut, dengan membuat tipe data Object secara langsung
+		 dengan mendeklarasikan detail type nya saat membuat variabel nya.
+		 Hal ini lebih sederhana dibandingkan membuat Type terlebih dahulu.
+		 
+			 +++ STUDY CASE : Penggunaan Object Type +++
+				const person: {id: string, name: string} = {
+					id: "1",
+					name: "Aldi"
+				}
+				
+				console.info(person);
+				
+				person.id = "2";
+				person.name = "Hilda";
+				// person.description = "error"; => error: karena description tidak ada pada deklarasi Object.
+				
+				console.info(person);
+
+		 Cara ini lebih efektif dalam penggunaan type untuk 1 komponen kode saja (kebutuhan yang sederhana), 
+		 tidak untuk penggunaan pada banyak komponen kode (penggunaan secara berulang).
+		 Penggunaan secara berulang lebih direkomendasikan menggunakan Alias (kebutuhan yang lebih kompleks).
+  
+  
+
+------------------------------------------------------------------------------------------
+ ### 9. Optional Properties ###
+------------------------------------------------------------------------------------------
+		 Ketika pembuatan attribute pada Object atau Type, secara default seluruh attribute didalamnya
+		 wajib diisi nilainya. Jika tidak diisi maka akan terjadi error.
+		 Namun, ada kalanya tidak semua attribute harus diisi nilainya. Contohnya saat mencoba dihubungkan
+		 dengan Database, pada database sendiri ada kalanya kolomnya itu bisa null / bisa kosong 
+		 (tidak wajib diisi).
+		 Pada suatu saat dibutuhkan suatu attribute tidak wajib diisi, agar attribute bisa dikosongkan
+		 dapat menambahkan tanda "?" untuk menandakan bahwa attribute / properties tersebut adalah opsional.
+		 
+			+++ STUDY CASE : Penggunaan Optional Properties pada Object +++
+				export type Category = {
+					id: ID;
+					name: string;
+					description?: string;
+				};
+				
+				export type Product = {
+				  id: ID,
+				  name: string;
+				  price: number;
+				  category: Category;
+				  description?: string;  => description, tidak wajib diisi.
+				}
+				
+				const person: {id: string, name: string, hobbies?: string[]} = {
+					id: "1",
+					name: "Aldi"
+				};
+				
+				console.info(person);
+				
+				person.id = "2";
+				person.name = "Hilda";
+				person.hobbies = ["Main", "Nyeblak", "Tiktok"];
+				console.info(person);
+  
+  
+------------------------------------------------------------------------------------------
+ ### 10. ENUM ###
+------------------------------------------------------------------------------------------
+		 Enum merupakan tipe data yang digunakan untuk mendefinisikan sekumpulan nilai konstan dengan
+		 nama yang lebih deskriptif.
+		 Secara singkat, Enum merupakan tipe data yang sudah pasti, dan hanya mengembalikan nilai
+		 Number dan String.
+		 Tipe data Enum tidak tersedia di JavaScript.
+		 Ketika di kompilasi, tipe data enum ini akan dikonversi menjadi String, dan bisa juga
+		 dikonversi menjadi number di JavaScript.
+		 
+			+++ STUDY CASE : Enum 1 +++
+				export enum CustomerType {
+					REGULER,
+					GOLD,
+					PLATINUM
+				};
+				
+				export type Customer = {
+					id: number;
+					name: string;
+					type: CustomerType;
+				}
+				
+				// Penggunaan Enum
+				 const customer: Customer = {
+							id: 1,
+							name: "Aldi",
+							type: CustomerType.GOLD,
+						};
+
+						console.info(customer); // output: { id: 1, name: 'Aldi', type: 1 }
+						
+		 Secara default, Enum pada TypeScript akan dikonversi menjadi tipe data Number
+		 Jika ingin membuat Enum mengembalikan tipe data String, hal itu bisa dilakukan 
+		 pada saat membuat Enum tersebut.
+		 
+			+++ STUDY CASE : Enum 2 +++
+				export enum CustomerType {
+					REGULER = 'REGULER',
+					GOLD = 'GOLD',
+					PLATINUM = 'PLATINUM'
+				};
+				
+				export type Customer = {
+					id: number;
+					name: string;
+					type: CustomerType;
+				}
+				
+				// Penggunaan Enum
+				 const customer: Customer = {
+							id: 1,
+							name: "Aldi",
+							type: CustomerType.GOLD,
+						};
+
+						console.info(customer); // output: { id: 1, name: 'Aldi', type: "GOLD" }
+
+		 Secara default, Enum pada TypeScript akan dikonversi menjadi tipe data Number
+		 Jika ingin membuat Enum mengembalikan tipe data lain, hal itu bisa dilakukan 
+		 pada saat membuat Enum tersebut.
+  
+------------------------------------------------------------------------------------------
+ ### 11. Undefined & Null ###
+------------------------------------------------------------------------------------------
+		 Pada TypeScript & JavaScript, null dan undefined adalah dua nilai yang sering membingungkan,
+		 hampir terlihat serupa (falsy) tetapi memiliki makna yang berbeda.
+		 
+		 1. Undefined
+		    undefined memiliki makna variabel atau parameter belum memiliki nilai.
+		    Biasanya terjadi, ketika variabel dideklarasikan tetapi tidak diinisialisasi (tidak diisi nilai).
+		    Fungsi yang tidak mengembalikan nilai eksplisit juga akan mengembalikan undefined.
+		    Properti objek yang tidak ada juga akan bernilai Undefined.
+  
+				+++ STUDY CASE : Undefined +++
+					function sayhello(name?: string) {
+						if (name) {
+							console.info(`Hello ${name} | type : ${typeof name}`);
+						} else {
+							console.info(`Hello | type : ${typeof name}`);
+						}
+					}
+					
+					// undefined
+					sayHello(); 			=> output: Hello | type : undefined
+					// not undefined
+					sayHello("Aldi"); => output: Hello Aldi | type : string
+					// null
+					sayHello(null); 	=> Error: Argument of type 'null' is not assignable to parameter of type 
+															 'string | undefined'.ts(2345)
+  
+		 2. Null
+		    null memiliki makna sengaja tidak memiliki nilai.
+		    Harus secara eksplisi diberikan nilai Null.
+		    Biasanya digunakan untuk menandakan tidak ada data atau sebagai placeholder nilai kosong
+		    (belum dipastikan nilainya seperti apa, tapi dibutuhkan deklarasi variabelnya untuk diisi nanti).
+  
+				+++ STUDY CASE : Null +++
+					function sayhello(name?: string | null) {
+						if (name) {
+							console.info(`Hello ${name} | type : ${typeof name}`);
+						} else {
+							console.info(`Hello ${name} | type : ${typeof name}`);
+						}
+					}
+					
+					// null
+					sayHello(null); 			=> output: Hello null | type : object  
+																   -> null: 000000 -> object: 000
+					// not null
+					sayHello("Aldi"); => output: Hello Aldi | type : string
+  
+  
+----------------------------------------------------------------------------------------------------------
+ ### 12. Interface ###
+----------------------------------------------------------------------------------------------------------
+		 Inteface adalah struktur yang digunakan untuk mendefinisikan kontrak atau bentuk objek dalam kode.
+		 Secara singkat, Interface adalah cara lain melakukan deklarasi data selain menggunakan Type.
+		 Interface lebih mudah dikembangkan dibanding dengan Type.
+		 Oleh karena itu, kebanyakan tipe data yang kompleks, untuk menanganinya lebih memilih
+		 menggunakan Interface dibanding menggunakan Type.
+		 Interface hanya ada & berlaku di TypeScript saja, tidak untuk JavaScript.
+		 
+		 Perbedaan anatara Interface dangan Type:
+		 --------------------------------------------------------------------------------------
+		 | Aspek						|	Interface									| Type																|
+  	 --------------------------------------------------------------------------------------
+  	 | Dapat diperluas	| Bisa menggunakan extends	| Bisa menggunakan & (Intersection)		|
+  	 | (Extendable)			| untuk mewarisi properti		| untuk menghubungkan beberapat tipe	|
+  	 |									| dari interface lain				|																			|
+  	 --------------------------------------------------------------------------------------
+     | Dapat diimplemen	| Bisa digunakan dengan 		| Tidak bisa diimplementasikan dalam	|
+  	 | tasikan oleh 		| implements dalam class		| class																|
+		 | Class						|												 		|																			|
+  	 --------------------------------------------------------------------------------------
+     | Dapat mendefini	| Bisa, tetapi sintaksnya 	| Bisa, dengan cara yang lebih mudah	|
+  	 | sikan Function 	| lebih panjang							| 																		|
+		 |      						|												 		|																			|
+  	 --------------------------------------------------------------------------------------
+     | Dapat deklarasi	| Bisa dideklarasikan ulang | Tidak bisa dideklarasikan ulang,		|
+  	 | ulang  (merging) | dan digabungkan						| harus dideklarasikan dalam satu			|
+		 |      						|												 		| blok																|
+  	 --------------------------------------------------------------------------------------
+
+				+++ STUDY CASE : Interface +++
+					export interface Seller {
+							id: number;
+							name: string;
+							address?: string;
+					}
+					
+					const seller: Seller = {
+						id: 1,
+						name: "Aldi",
+					};
+
+					console.info(seller);
+						
+
+----------------------------------------------------------------------------------------------------------
+ ### 13. Readonly Properties ###
+----------------------------------------------------------------------------------------------------------
+		 Properties juga dapat dijakan readonly, yang berarti properti tersebut tidak bisa diubah lagi.
+		 Caranya dengan menggunakan kata kunci readonly pada properti tersebut.
+
+				+++ STUDY CASE : Readonly Properties +++
+					export interface Seller {
+							id: number;
+							name: string;
+							address?: string;
+							readonly nib?: string;
+							readonly npwp?: string;
+					}
+					
+					// Interface
+					const seller: Seller = {
+						id: 1,
+						name: "Aldi",
+						nib: "12345",
+						npwp: "12345",
+					};
+
+					console.info(seller);
+
+					// coba ubah nilai readonly
+					seller.nib = "123-ubah"; 			=> Error: Cannot assign to 'nib' because it is a read-only 
+																									property.ts(2540)
+  
+					// Type
+					const buyer: Buyer = {
+						id: 2,
+						name: "Hilda",
+						nib: "12345",
+						npwp: "12345",
+					};
+
+					console.info(buyer);
+				
+				
+  
+----------------------------------------------------------------------------------------------------------
+ ### 14. Function Interface ###
+----------------------------------------------------------------------------------------------------------
+		 Function Interface merupakan konsep dimana menggunakan interface untuk mendefinisikan struktur
+		 suatu function. Hal ini bertujuan memastikan function memeliki struktur yang sesuai.
+		 Secara singkat, Function Interface adalah membuat function dalam bentuk interface.
+		 Dengan demikian, ketika ingin membuat variabel yang berisi function (expression function) cukup
+		 dengan menggunakan interface tersebut.
+
+				+++ STUDY CASE : Function Interface +++
+					interface AddFunction {
+						(value1: number, valud2: number): number
+					}
+					
+					const add: AddFunction = (value1: number, value2: number): number => {
+						return value1 + value2;
+					} 
+					
+					console.info(add(2,2));
+		 
+  
+----------------------------------------------------------------------------------------------------------
+ ### 15. Indexable Interface ###
+----------------------------------------------------------------------------------------------------------
+		 Indexable Interface merupakan jenis Interface yang memungkinkan untuk mengakses nilai dalam suatu
+		 Object atau Array menggunakan indeks tertentu.
+		 Secara singkat, Indexable Interface merupakan Interface yang digunakan untuk membuat tipe data dengan
+		 jenis yang memiliki index, seperti Array atau Object.
+
+				+++ STUDY CASE : Indexable Interface : Array +++
+					interface StringArray {
+						[index: number]: string
+					}
+					
+					const names: StringArray = ["Aldi", "Hilda", "Amelia"];
+					
+					console.info(names[0]);
+					console.info(names[1]);
+					console.info(names[2]);
+
+				+++ STUDY CASE : Indexable Interface : Array +++
+					interface StringDictionary {
+						[key: string]: string
+					}
+					
+					const dictionary: StringDictionary = {
+						name: "Aldi",
+						address: "Karawang"
+					};
+					
+					console.info(dictionary["name"]);
+					console.info(dictionary["address"]);
+  
+
+----------------------------------------------------------------------------------------------------------
+ ### 16. Extending Interface ###
+----------------------------------------------------------------------------------------------------------
+		 Extending Interface merupakan fitur yang memungkinkan satu interface mewarisi (extend) properti dari
+		 Interface lain.
+		 Secara singkat, Extending Interface merupakan suatu Interface dapat melanjutkan (extend) ke Interface
+		 lain.
+		 Secara otomatis attribute interface yang dilanjutkan dimiliki juga oleh interface tersebut.
+		 Ini berguna untuk menghindari duplikasi kode dan membuat struktur data lebih fleksibel serta dapat
+		 digunakan kembali. Sehingga mempermudah dalam membuat tipe data yang kompleks.
+
+				+++ STUDY CASE : Extending Interface +++
+					interface Employee {
+						id: string;
+						name: string;
+						division: string;
+					}
+					
+					interface Manager extends Employee {
+						numberOfEmployees: number;
+					}
+
+
+----------------------------------------------------------------------------------------------------------
+ ### 17. Function in Interface ###
+----------------------------------------------------------------------------------------------------------
+		 Function in Interface merupakan penambahan function kedalam interface untuk sebuah Object, yang
+		 artinya properti function juga harus dipenuhi.
+		 Secara singkat, Function in Interface merupakan penambahan sebuah function kedalam sebuah Interface.
+
+				+++ STUDY CASE : Function in Interface +++
+					interface Person {
+						name: string;
+						sayHello(name: string): string;
+					}
+					
+					const person: Person = {
+						name: "Aldi",
+						sayHello: (name: string): string => {
+							return `Hello ${name}, my name is ${person.name}`;
+						}
+						//sayHello: function(name: string): string {
+						//	return `Hello ${name}, my name is ${this.name}`;
+						//},
+					}
+					
+					console.info(person.sayHello("Hilda"));
+					
+
+----------------------------------------------------------------------------------------------------------
+ ### 18. Intersection Types ###
+----------------------------------------------------------------------------------------------------------
+		 Intersection Types merupakan fitur yang memungkinkan untuk menggabungkan dua atau lebih tipe menjadi
+		 satu tipe baru, tipe hasil gabungan akan memiliki semua properti dari tipe-tipe yang digabungkan.
+		 Secara singkat, Intersection Types merupakan cara membuat tipe data baru dengan cara menggabungkan
+		 dua tipe data lain.
+		 Hal ini sangat cocok ketika ada kasus tidak bisa melakukan extends pada suatu Interface,
+		 misalkan dibutuhkan penyesuaian tipe data pada sebuah Library/Package yang dibuat orang lain dan
+		 tidak dapat diubah. Dengan menggunakan Intersection Types hal tersebut dapat teratasi.
+		 Operator yang digunakan untuk menggabungkan tipe data, yaitu: & (ampersand).
+
+				+++ STUDY CASE : Intersection Types (merging only) +++
+					interface HasName {
+						name: string;
+					}
+					
+					interface HasId {
+						id: string;
+					}
+					
+					type Domain = HasId & HasName;
+					
+					const domain: Domain = {
+						id: "1",
+						name: "Aldi"
+					}
+					
+					console.info(domain);
+
+				+++ STUDY CASE : Intersection Types (merging & customizing) +++
+					interface HasName {
+						name: string;
+					}
+					
+					interface HasId {
+						id: string;
+					}
+					
+					interface CustomizingDomain  extends Hasname, HasId {
+						address: string;
+					}
+					
+					const customizingDomain: CustomizingDomain = {
+						id: "2",
+						name: "Hilda",
+						address: "Karawang"
+					}
+					
+					console.info(customizingDomain);
+  
+  
+  
+----------------------------------------------------------------------------------------------------------
+ ### 19. Types Assertions ###
+----------------------------------------------------------------------------------------------------------
+		 Types Assertions merupakan fitur yang memungkinkan untuk memberi tahu kompiler suatu nilai memiliki
+		 tipe data tertentu, tanpa mengubah nilai dari tipe data tersebut secara nyata.
+		 Cara penggunaan nya menggunakan kata kunci: as.
+
+				+++ STUDY CASE : Types Assertions +++
+					interface Person {
+						name: string;
+						sayHello(name: string): string;
+					}
+
+						const person: any = {
+							name: "Aldi",
+							age: 27
+						};
+					
+					const ta_person: Person = person as Person;
+					console.info(ta_person); 				=> Output: { name: 'Aldi', age: 27 }
+					console.info(ta_person);				=> Valid: hanya name yang dapat digunakan, karena dikeduanya ada. 
+					
+					console.info(ta_person.age); 		=> Error: properti age tidak ada di interface Person.
+					ta_person.sayHello("Hilda");		=> Error: sayHello tidak ada dalam object person.
+					
+					* Note: Pastikan properti yang digunakan benar-benar ada dikeduanya.
+  
+  				+++ STUDY CASE : Types Assertions (Real Case) +++
+  				    interface User {
+								id: number;
+								name: string;
+								email: string;
+							}
+
+							const apiResponse: unknown = [
+								{ id: 1, name: "Aldi Ramdani", email: "aldi@example.com" },
+								{ id: 2, name: "Hilda Amelia", email: "hilda@example.com" },
+							];
+
+							const users = apiResponse as User[];
+							console.info(users);
+  
+  
+  
+----------------------------------------------------------------------------------------------------------
+ ### 20. Function ###
+----------------------------------------------------------------------------------------------------------
+		 Function merupakan blok kode yang dapat digunakan kembali untuk menjalankan tugas tertentu, dan pada
+		 umumnya Function menerima input (parameter) dan mengembalikan output (return value).
+		 Pada TypeScript, pembuatan Functionnya sama dengan pembuatan Function di JavaScript.
+		 Salah satu yang membedakannya adalah, pada parameter perlu ditentukan tipe data, dan perlu ditentukan
+		 juga tipe data return valuenya.
+		 Pada Function yang tidak mengembalikan nilai, bisa menggunakan tipe data void, atau tidak perlu
+		 menetapkannya sama sekali, seperti pada JavaScript.
+
+				+++ STUDY CASE : Function +++
+					function sayHello(name: string): string {
+						return `Hello ${name}`;
+					}
+					
+					function printHello(name: string): void {
+						console.info(`Hello ${name}`);
+					}
+					
+					printHello("Aldi");
+  
+  
+----------------------------------------------------------------------------------------------------------
+ ### 21. Function Parameter ###
+----------------------------------------------------------------------------------------------------------
+		 Function Parameter merupakan nilai yang diterima function sebagai input untuk diproses.
+		 Pada TypeScript, mendukung function memiliki banyak parameter, penggunaan nilai default, dan rest
+		 parameter (variable argument). Sama seperti pada JavaScript.
+		 Perbedaannya, pada TypeScript dapat ditentukan tipe data untuk parameter, serta parameter tersebut
+		 wajib diisi atau tidak (optional parameter). Sedangkan pada JavaScript tidak dapat melakukan itu.
+		 
+
+				+++ STUDY CASE : Function Parameter : Defaut Parameter +++
+					function sayHello(name: string = "Guest"): string {
+							return `Hello ${name}`;
+					}
+					const assignResult = sayHello("Aldi");
+					console.info(assignResult);
+					expect(assignResult).toBe("Hello Aldi");
+
+					const notAssignResult = sayHello();
+					console.info(notAssignResult);
+					expect(notAssignResult).toBe("Hello Guest");
+  
+				+++ STUDY CASE : Function Parameter : Rest Parameter +++
+					function sum(...values: number[]): number {
+							let total = 0;
+							for (const value of values) {
+									total += value;
+							}
+							return total;
+					}
+					const result = sum(1, 2, 3, 4, 5);
+					console.info(result);
+					expect(result).toBe(15);
+					
+				+++ STUDY CASE : Function Parameter : Optional Parameter +++
+					function sum(...values: number[]): number {
+							let total = 0;
+							for (const value of values) {
+									total += value;
+							}
+							return total;
+					}
+					const result = sum(1, 2, 3, 4, 5);
+					console.info(result);
+					expect(result).toBe(15);
+  
+  
+  
+----------------------------------------------------------------------------------------------------------
+ ### 22. Function Overloading ###
+----------------------------------------------------------------------------------------------------------
+		 Function Overloading merupakan fitur yang hanya tersedia pada TypeScript yang memungkinkan dapat
+		 mendefinisikan beberapa versi function dengan parameter yang berbeda, tetapi hanya memiliki satu
+		 implementasi.
+		 Secara singkat, Function Overloading merupakan fitur untuk membuat function dengan nama yang sama,
+		 namun dengan parameter input yang berbeda.
+		 Pada fitur default JavaScript, membuat function dengna input data yang berbeda dan ouput yang meng-
+		 hasilkan data yang berbeda itu sudah biasa dilakukan.
+		 Namun, hal tersebut membuat function tidak aman, karena bisa mengembalikan berbeda-beda tipe data.
+		 Function Overloading pada TypeScript, membuat function menjadi lebih aman.
+
+				+++ STUDY CASE : Function Overloading +++
+					function callMe(value: number): number;
+					function callMe(value: string): string;
+					function callMe(value: any): any {
+						if (typeof value === "string") {
+							return value.toUpperCase();
+						} else if (typeof value === "number") {
+							return value * 10;
+						}
+					}
+
+					const resultString = callMe("Aldi");
+					console.info(resultString);
+
+					const resultNumber = callMe(10);
+					console.info(resultNumber);
+					
+  
+----------------------------------------------------------------------------------------------------------
+ ### 23. Function sebagai Parameter ###
+----------------------------------------------------------------------------------------------------------
+		 Function sebagai parameter berarti mengirimkan sebuah function ke dalam function lainnya, untuk
+		 kemudian dipanggil (dieksekusi) di dalam function tersebut (callback function).
+		 
+		 Pada Typescript, jika parameter adalah function maka harus ditentukan parameter untuk function
+		 sebagai parameternya itu apa, dan nilai kembali (return value) dari function tersebut apa.
+		 
+		 Praktik terbaiknya, untuk function parameter, dapat menggunakan Function Interface, tapi untuk
+		 saat ini tidak akan menggunakan Function Interface.
+
+				+++ STUDY CASE : Function as Parameter +++
+					function sayHello(name: string, filter: (name: string) => string) {
+						return `Hello ${filter(name)}`;
+					}
+
+					function toUpper(name: string): string {
+						return name.toUpperCase();
+					}
+
+					console.info(sayHello("Aldi", toUpper));
+  
+
+				+++ STUDY CASE : Function as Parameter : Anonymous Function +++
+					function sayHello(name: string, filter: (name: string) => string) {
+						return `Hello ${filter(name)}`;
+					}
+
+					function toUpper(name: string): string {
+						return name.toUpperCase();
+					}
+
+					console.info(sayHello("Aldi", function (name: string):string {
+						return name.toUpperCase();
+					}));
+  
+  				+++ STUDY CASE : Function as Parameter : Arrow Function +++
+					function sayHello(name: string, filter: (name: string) => string) {
+						return `Hello ${filter(name)}`;
+					}
+
+					function toUpper(name: string): string {
+						return name.toUpperCase();
+					}
+
+					console.info(sayHello("Aldi", function (name: string):string => name.toUpperCase());
+  
+  
+  
+----------------------------------------------------------------------------------------------------------
+ ### 24. IF Statement ###
+----------------------------------------------------------------------------------------------------------
+		 IF Statement pada Typescript, sama dengan If Statement pada JavaScript.
+
+				+++ STUDY CASE : IF Statement +++
+					function grade(grade: number): string {
+						if (grade > 80) {
+							return "Good";
+						} else if (grade > 60) {
+							return "Not Bad";
+						} else {
+							return "Try Again";
+						}
+					}
+
+					console.info(grade(86));
+					console.info(grade(61));
+					console.info(grade(50));
+  
+  
+  
+----------------------------------------------------------------------------------------------------------
+ ### 25. Ternary Operator ###
+----------------------------------------------------------------------------------------------------------
+		 Ternary Operator pada Typescript, sama dengan Ternary Opeartor pada JavaScript.
+
+				+++ STUDY CASE : Ternary Operator +++
+					function graduation(grade: number): string {
+						return grade >= 75 ? "Congratulation" : "Try Again";
+					}
+
+					console.info(graduation(86));
+					console.info(graduation(61));
+  
+  
+  
+  
+----------------------------------------------------------------------------------------------------------
+ ### 26. Switch Statement ###
+----------------------------------------------------------------------------------------------------------
+		 Switch Statement pada Typescript, sama dengan Switch Statement pada JavaScript.
+
+				+++ STUDY CASE : Switch Statement +++
+					function selectNumber(statement: number): string {
+						switch (statement) {
+							case 1:
+								return "anda pilih 1";
+							case 2:
+								return "anda pilih 2";
+							default:
+								return "anda harus memilih antara 1 atau 2";
+						}
+					}
+					console.info(selectNumber(1));
+					console.info(selectNumber(2));
+					console.info(selectNumber(3));
+  
+  
+  
+----------------------------------------------------------------------------------------------------------
+ ### 27. Looping ###
+----------------------------------------------------------------------------------------------------------
+		 Looping pada Typescript, sama dengan Looping pada JavaScript.
+
+				+++ STUDY CASE : Looping +++
+					function loop(datas: string[]): void {
+						for (let i = 0; i < datas.length; i++) {
+							console.info(datas[i]);
+						}
+
+						for (const data of datas) {
+							console.info(data);
+						}
+
+						for (const index in datas) {
+							console.info(datas[index]);
+						}
+					}
+					
+					const names = ["Aldi", "Hilda", "Amelia"];
+					loop(names);
+				
+				
+  
+----------------------------------------------------------------------------------------------------------
+ ### 28. While Loop ###
+----------------------------------------------------------------------------------------------------------
+		 While Loop pada Typescript, sama dengan While Loop pada JavaScript.
+
+				+++ STUDY CASE : While Loop +++
+					function counter(setCount: number): void {
+						let counter: number = 0;
+						while (counter <= setCount) {
+							console.info(counter);
+							counter++;
+						}
+					}
+
+    			counter(10);
+
+				
+----------------------------------------------------------------------------------------------------------
+ ### 29. Do While Loop ###
+----------------------------------------------------------------------------------------------------------
+		 Do While Loop pada Typescript, sama dengan Do While Loop pada JavaScript.
+
+				+++ STUDY CASE : While Loop +++
+					function doCounter(setCount: number): void {
+						let counter: number = 0;
+						do {
+							console.info(counter);
+							counter++;
+						} while (counter <= setCount);
+					}
+
+		  		doCounter(10);
+		  		
+  
+----------------------------------------------------------------------------------------------------------
+ ### 30. Break Continue ###
+----------------------------------------------------------------------------------------------------------
+		 Break Continue pada Typescript, sama dengan Break Continue pada JavaScript.
+
+				+++ STUDY CASE : Break Continue +++
+					function breakCounter(setCounter: number): void {
+						let counter: number = 0;
+
+						do {
+							counter++;
+							if (counter == setCounter) {
+								break;
+							}
+							if (counter % 2 == 0) {
+								continue;
+							}
+							console.info(counter);
+						} while (true);
+					}
+
+   				breakCounter(10);
+  
+
+----------------------------------------------------------------------------------------------------------
+ ### 31. Javascript Feature in Typescript ###
+----------------------------------------------------------------------------------------------------------
+		 Semua fitur yang ada pada Javascript didukung pada Typescript, diantaranya: Operator Matematika,
+		 Perbandingan, Logika, String Template, Optional Chaining, With Statement, Default Parameter, Function
+		 Generator, Getter-Setter, Destructuring, Modules, Standard Library, dan lain-lain.
+		 
+		 Yang membedakan antara Javascript dengan Typescript adalah pada fitur Tipe Data, karena Typescript
+		 merupakan bahasa pemrograman Strongly Type, dimana ketika menggunakan Typescript diharuskan menentukan
+		 tipe data dari setiap variabel dan parameter.
+		 
+		 Secara garis besar, Typescript merupakan Javascript yang diberikan fitur tambahan.
+  
+
+
+
+----------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------
+ **** Object-Oriented Programming TypeScript (OOP) ****
+----------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------
+		Semua fitur yang ada pada Javascript didukung pada Typescript, diantaranya: Operator Matematika,
+		 Perbandingan, Logika, String Template, Optional Chaining, With Statement, Default Parameter, Function
+		 Generator, Getter-Setter, Destructuring, Modules, Standard Library, dan lain-lain.
+		 
+----------------------------------------------------------------------------------------------------------
+ ### 32. Javascript Feature in Typescript ###
+----------------------------------------------------------------------------------------------------------
+		 Semua fitur yang ada pada Javascript didukung pada Typescript, diantaranya: Operator Matematika,
+		 Perbandingan, Logika, String Template, Optional Chaining, With Statement, Default Parameter, Function
+		 Generator, Getter-Setter, Destructuring, Modules, Standard Library, dan lain-lain.
+		 
+		 Yang membedakan antara Javascript dengan Typescript adalah pada fitur Tipe Data, karena Typescript
+		 merupakan bahasa pemrograman Strongly Type, dimana ketika menggunakan Typescript diharuskan menentukan
+		 tipe data dari setiap variabel dan parameter.
+		 
+		 Secara garis besar, Typescript merupakan Javascript yang diberikan fitur tambahan.
+  
+  
+  
+  
+  
+  
+  
